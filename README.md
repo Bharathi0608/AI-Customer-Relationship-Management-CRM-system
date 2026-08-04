@@ -1,6 +1,9 @@
 # 🤖 AI CRM for Healthcare Professionals (HCP)
 
 An intelligent Customer Relationship Management (CRM) system designed for pharmaceutical sales representatives to log, manage, and analyse their interactions with Healthcare Professionals using a **LangGraph AI Agent**, **Groq LLM**, **FastAPI**, **React**, and **PostgreSQL**.
+<img width="1294" height="607" alt="image" src="https://github.com/user-attachments/assets/55e8c3cf-a393-4f7a-8166-45a17aa3767d" />
+<img width="1330" height="580" alt="image" src="https://github.com/user-attachments/assets/da78cdb6-36ef-44eb-a058-574fe1ebe989" />
+<img width="1346" height="614" alt="image" src="https://github.com/user-attachments/assets/da40ae1e-44e0-46f1-ab84-a11c1ca74374" />
 
 ---
 
