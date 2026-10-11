@@ -237,7 +237,10 @@ const saved = await response.json();
         /\b(?:sentiment\s+(?:is|to|as)\s+|make\s+(?:the\s+)?sentiment\s+(?:as\s+)?|change\s+(?:the\s+)?sentiment\s+to\s+)(positive|neutral|negative)\b/i
       );
 
-      if (sentimentMatch) {
+      if (
+  sentimentMatch &&
+  /^(?:please\s+)?(?:(?:make|change|update|set)\s+)?(?:the\s+)?sentiment(?:\s+(?:is|to|as))?\s+(?:positive|neutral|negative)[.! ]*$/i.test(userMsg.trim())
+) {
         const sentiment =
           sentimentMatch[1].charAt(0).toUpperCase() +
           sentimentMatch[1].slice(1).toLowerCase();
