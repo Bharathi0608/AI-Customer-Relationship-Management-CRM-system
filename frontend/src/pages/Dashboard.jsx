@@ -171,13 +171,26 @@ export default function Dashboard() {
     }
     setIsSaving(true);
     try {
-      fetch('https://ai-customer-relationship-management.vercel.app/interactions/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      if (!response.ok) throw new Error('Save failed');
-      const saved = await response.json();
+      // fetch('https://ai-customer-relationship-management.vercel.app/interactions/', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(formData),
+      // });
+      
+const response = await fetch(
+  'https://ai-customer-relationship-management.vercel.app/interactions/',
+  {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formData),
+  }
+);
+
+if (!response.ok) throw new Error('Save failed');
+const saved = await response.json();
+
+      // if (!response.ok) throw new Error('Save failed');
+      // const saved = await response.json();
       setHistory(prev => [{ ...formData, id: saved.id }, ...prev]);
       setTotalLogged(n => n + 1);
       addToast('success', 'Interaction Saved!', `Saved interaction with ${formData.hcp_name}`);
@@ -219,12 +232,26 @@ export default function Dashboard() {
     setMessages(prev => [...prev, { role: 'system', type: 'typing', content: '', id: typingId }]);
 
     try {
-      fetch('https://ai-customer-relationship-management.vercel.app/ai/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg, context: formData }),
-      });
-      if (!response.ok) throw new Error('Backend error');
+      // fetch('https://ai-customer-relationship-management.vercel.app/ai/chat', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ message: userMsg, context: formData }),
+      // });
+      // if (!response.ok) throw new Error('Backend error');
+      
+const response = await fetch(
+  'https://ai-customer-relationship-management.vercel.app/ai/chat',
+  {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: userMsg, context: formData }),
+  }
+);
+
+if (!response.ok) {
+  throw new Error(`Backend error: ${response.status}`);
+}
+
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
