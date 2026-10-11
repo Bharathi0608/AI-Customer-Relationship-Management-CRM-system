@@ -171,7 +171,7 @@ export default function Dashboard() {
     }
     setIsSaving(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/interactions', {
+      fetch('https://ai-customer-relationship-management.vercel.app/interactions/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -219,7 +219,7 @@ export default function Dashboard() {
     setMessages(prev => [...prev, { role: 'system', type: 'typing', content: '', id: typingId }]);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/ai/chat', {
+      fetch('https://ai-customer-relationship-management.vercel.app/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMsg, context: formData }),
