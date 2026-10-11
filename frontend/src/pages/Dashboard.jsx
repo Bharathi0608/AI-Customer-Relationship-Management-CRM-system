@@ -292,14 +292,16 @@ if (!response.ok) {
         content: '✨ **Interaction parsed!** Form fields highlighted in blue have been auto-filled. Review and save when ready.'
       } : m));
 
-      // setPrevFormData(formData);
-      // setFormData(prev => ({
-      //   ...prev, ...data,
-      //   interaction_type: data.interaction_type || prev.interaction_type,
-      //   sentiment: data.sentiment || prev.sentiment,
-      //   interaction_date: data.interaction_date || now.toISOString().split('T')[0],
-      //   interaction_time: data.interaction_time || now.toTimeString().split(' ')[0].substring(0, 5),
-      // }));
+      
+setFormData((prev) => ({
+  ...prev,
+  ...data,
+  interaction_type: data.interaction_type || prev.interaction_type,
+  sentiment: data.sentiment || prev.sentiment,
+  interaction_date: data.interaction_date || prev.interaction_date,
+  interaction_time: data.interaction_time || prev.interaction_time,
+}));
+
       const fields = [
   'hcp_name',
   'interaction_type',
