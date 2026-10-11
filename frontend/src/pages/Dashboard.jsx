@@ -265,14 +265,44 @@ export default function Dashboard() {
         content: '✨ **Interaction parsed!** Form fields highlighted in blue have been auto-filled. Review and save when ready.'
       } : m));
 
-      setPrevFormData(formData);
-      setFormData(prev => ({
-        ...prev, ...data,
-        interaction_type: data.interaction_type || prev.interaction_type,
-        sentiment: data.sentiment || prev.sentiment,
-        interaction_date: data.interaction_date || now.toISOString().split('T')[0],
-        interaction_time: data.interaction_time || now.toTimeString().split(' ')[0].substring(0, 5),
-      }));
+      // setPrevFormData(formData);
+      // setFormData(prev => ({
+      //   ...prev, ...data,
+      //   interaction_type: data.interaction_type || prev.interaction_type,
+      //   sentiment: data.sentiment || prev.sentiment,
+      //   interaction_date: data.interaction_date || now.toISOString().split('T')[0],
+      //   interaction_time: data.interaction_time || now.toTimeString().split(' ')[0].substring(0, 5),
+      // }));
+      const fields = [
+  'hcp_name',
+  'interaction_type',
+  'interaction_date',
+  'interaction_time',
+  'attendees',
+  'topics_discussed',
+  'materials_shared',
+  'samples_distributed',
+  'sentiment',
+  'outcomes',
+  'follow_up_actions'
+];
+
+setPrevFormData(formData);
+
+setFormData(prev => {
+  const updated = { ...prev };
+
+  fields.forEach(field => {
+    const value = data[field];
+
+    // Only update fields explicitly provided by the AI.
+    if (typeof value === 'string' && value.trim() !== '') {
+      updated[field] = value.trim();
+    }
+  });
+
+  return updated;
+});
       addToast('success', 'Form Auto-Filled!', 'AI extracted and populated the form fields.');
     // } catch (error) {
     //   setMessages(prev => prev.filter(m => m.id !== typingId));
