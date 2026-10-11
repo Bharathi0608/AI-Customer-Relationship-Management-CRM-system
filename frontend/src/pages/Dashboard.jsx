@@ -274,45 +274,64 @@ export default function Dashboard() {
         interaction_time: data.interaction_time || now.toTimeString().split(' ')[0].substring(0, 5),
       }));
       addToast('success', 'Form Auto-Filled!', 'AI extracted and populated the form fields.');
-    } catch (error) {
-      setMessages(prev => prev.filter(m => m.id !== typingId));
-      setTimeout(() => {
-        let extractedName = 'Dr. Smith';
-        const nameMatch = userMsg.match(/Dr\.?\s+([A-Za-z]+)/i);
-        if (nameMatch) extractedName = nameMatch[0];
-        let extractedSentiment = 'Neutral';
-        if (/positive/i.test(userMsg)) extractedSentiment = 'Positive';
-        else if (/negative/i.test(userMsg)) extractedSentiment = 'Negative';
-        let extractedSamples = '';
-        const samplesMatch = userMsg.match(/(\d+)\s+samples?/i);
-        if (samplesMatch) extractedSamples = `${samplesMatch[1]} samples`;
+    // } catch (error) {
+    //   setMessages(prev => prev.filter(m => m.id !== typingId));
+    //   setTimeout(() => {
+    //     let extractedName = 'Dr. Smith';
+    //     const nameMatch = userMsg.match(/Dr\.?\s+([A-Za-z]+)/i);
+    //     if (nameMatch) extractedName = nameMatch[0];
+    //     let extractedSentiment = 'Neutral';
+    //     if (/positive/i.test(userMsg)) extractedSentiment = 'Positive';
+    //     else if (/negative/i.test(userMsg)) extractedSentiment = 'Negative';
+    //     let extractedSamples = '';
+    //     const samplesMatch = userMsg.match(/(\d+)\s+samples?/i);
+    //     if (samplesMatch) extractedSamples = `${samplesMatch[1]} samples`;
         
-        let extractedTopic = '';
-        const topicMatch = userMsg.match(/(?:topic|about)(?:\s+discussion)?(?:\s+is|\s+was)?\s+([a-zA-Z\s]+?)(?:\s+so|\s+and|\s+but|\.|$)/i);
-        if (topicMatch) extractedTopic = topicMatch[1].trim();
-        else extractedTopic = userMsg.length < 50 ? userMsg : '';
+    //     let extractedTopic = '';
+    //     const topicMatch = userMsg.match(/(?:topic|about)(?:\s+discussion)?(?:\s+is|\s+was)?\s+([a-zA-Z\s]+?)(?:\s+so|\s+and|\s+but|\.|$)/i);
+    //     if (topicMatch) extractedTopic = topicMatch[1].trim();
+    //     else extractedTopic = userMsg.length < 50 ? userMsg : '';
 
-        const now = new Date();
-        setPrevFormData(formData);
-        setFormData(prev => ({
-          ...prev, hcp_name: extractedName, topics_discussed: extractedTopic || prev.topics_discussed,
-          materials_shared: /brochure/i.test(userMsg) ? 'Brochures' : prev.materials_shared,
-          samples_distributed: extractedSamples || prev.samples_distributed,
-          sentiment: extractedSentiment,
-          interaction_date: now.toISOString().split('T')[0],
-          interaction_time: now.toTimeString().split(' ')[0].substring(0, 5)
-        }));
-        setMessages(prev => [...prev, {
-          role: 'system', type: 'success',
-          content: '✨ **Interaction parsed!** Form fields have been auto-filled from your message. Review and save when ready.'
-        }]);
-        addToast('success', 'Form Auto-Filled!', 'AI extracted and populated the form fields.');
-        setIsLoading(false);
-      }, 1000);
-      return;
-    } finally {
-      setIsLoading(false);
+    //     const now = new Date();
+    //     setPrevFormData(formData);
+    //     setFormData(prev => ({
+    //       ...prev, hcp_name: extractedName, topics_discussed: extractedTopic || prev.topics_discussed,
+    //       materials_shared: /brochure/i.test(userMsg) ? 'Brochures' : prev.materials_shared,
+    //       samples_distributed: extractedSamples || prev.samples_distributed,
+    //       sentiment: extractedSentiment,
+    //       interaction_date: now.toISOString().split('T')[0],
+    //       interaction_time: now.toTimeString().split(' ')[0].substring(0, 5)
+    //     }));
+    //     setMessages(prev => [...prev, {
+    //       role: 'system', type: 'success',
+    //       content: '✨ **Interaction parsed!** Form fields have been auto-filled from your message. Review and save when ready.'
+    //     }]);
+    //     addToast('success', 'Form Auto-Filled!', 'AI extracted and populated the form fields.');
+    //     setIsLoading(false);
+    //   }, 1000);
+    //   return;
+    // } finally {
+    //   setIsLoading(false);
+    // }
+      } catch (error) {
+  setMessages(prev => [
+    ...prev.filter(m => m.id !== typingId),
+    {
+      role: 'system',
+      type: 'error',
+      content:
+        'Unable to process your message. Please check the backend connection and try again.'
     }
+  ]);
+
+  addToast(
+    'error',
+    'AI Request Failed',
+    'The backend could not process your message.'
+  );
+} finally {
+  setIsLoading(false);
+}
   };
 
   const handleKeyDown = (e) => {
