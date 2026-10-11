@@ -232,6 +232,37 @@ const saved = await response.json();
     setMessages(prev => [...prev, { role: 'system', type: 'typing', content: '', id: typingId }]);
 
     try {
+      
+      const sentimentMatch = userMsg.match(
+        /\b(?:sentiment\s+(?:is|to|as)\s+|make\s+(?:the\s+)?sentiment\s+(?:as\s+)?|change\s+(?:the\s+)?sentiment\s+to\s+)(positive|neutral|negative)\b/i
+      );
+
+      if (sentimentMatch) {
+        const sentiment =
+          sentimentMatch[1].charAt(0).toUpperCase() +
+          sentimentMatch[1].slice(1).toLowerCase();
+
+        setFormData(prev => ({
+          ...prev,
+          sentiment
+        }));
+
+        setMessages(prev =>
+          prev.map(m =>
+            m.id === typingId
+              ? {
+                  role: 'system',
+                  type: 'info',
+                  content: `Sentiment updated to ${sentiment}.`
+                }
+              : m
+          )
+        );
+
+        addToast('success', 'Sentiment Updated', `Sentiment changed to ${sentiment}.`);
+        return;
+      }
+
       // fetch('https://ai-customer-relationship-management.vercel.app/ai/chat', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
