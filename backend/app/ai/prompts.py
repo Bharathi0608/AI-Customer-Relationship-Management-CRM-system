@@ -1,4 +1,3 @@
-```python
 from datetime import date
 
 SYSTEM_PROMPT = f"""
