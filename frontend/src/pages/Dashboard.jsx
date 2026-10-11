@@ -263,6 +263,43 @@ const saved = await response.json();
         return;
       }
 
+      
+      const nameMatch = userMsg.match(
+        /(?:change|update|set)\s+(?:the\s+)?(?:dr\.?\s+name|doctor\s+name|hcp\s+name)\s+(?:to\s+)?(.+)/i
+      );
+
+      if (nameMatch) {
+        const newName = nameMatch[1]
+          .trim()
+          .replace(/[.!?]+$/, '');
+
+        setFormData(prev => ({
+          ...prev,
+          hcp_name: newName
+        }));
+
+        setMessages(prev =>
+          prev.map(m =>
+            m.id === typingId
+              ? {
+                  role: 'system',
+                  type: 'info',
+                  content: `Doctor name updated to ${newName}.`
+                }
+              : m
+          )
+        );
+
+        addToast(
+          'success',
+          'Doctor Name Updated',
+          `HCP name changed to ${newName}.`
+        );
+
+        return;
+      }
+
+
       // fetch('https://ai-customer-relationship-management.vercel.app/ai/chat', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
